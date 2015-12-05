@@ -1,0 +1,22 @@
+{
+    "name": "psx/psx-bundle",
+    "type": "symfony-bundle",
+    "description": "PSX Bundle",
+    "keywords": ["PSX", "API", "Rest", "JsonSchema"],
+    "homepage": "http://phpsx.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christoph Kappestein",
+            "email": "k42b3.x@gmail.com",
+            "homepage": "http://k42b3.com"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "~2.2",
+        "psx/psx": "~1.1"
+    },
+    "autoload": {
+        "psr-4": { "PSX\\PSXBundle\\": "" }
+    }
+}

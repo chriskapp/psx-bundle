@@ -1,0 +1,110 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="psx.data.reader.json.priority">16</parameter>
+        <parameter key="psx.data.reader.form.priority">8</parameter>
+        <parameter key="psx.data.reader.xml.priority">0</parameter>
+
+        <parameter key="psx.data.writer.json.priority">48</parameter>
+        <parameter key="psx.data.writer.atom.priority">32</parameter>
+        <parameter key="psx.data.writer.form.priority">24</parameter>
+        <parameter key="psx.data.writer.jsonx.priority">15</parameter>
+        <parameter key="psx.data.writer.xml.priority">0</parameter>
+    </parameters>
+
+    <services>
+        <service id="psx.psx_bundle.incoming_listener" class="PSX\PSXBundle\EventListener\IncomingListener">
+            <argument type="service" id="annotation_reader" />
+            <argument type="service" id="psx.data.importer" />
+            <argument>%kernel.root_dir%</argument>
+            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" />
+        </service>
+
+        <service id="psx.psx_bundle.outgoing_listener" class="PSX\PSXBundle\EventListener\OutgoingListener">
+            <argument type="service" id="annotation_reader" />
+            <argument type="service" id="psx.data.schema.assimilator" />
+            <argument type="service" id="psx.data.writer_factory" />
+            <argument>%kernel.root_dir%</argument>
+            <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
+        </service>
+
+        <service id="psx.data.importer" class="PSX\Data\Importer">
+            <argument type="service" id="psx.data.extractor" />
+            <argument type="service" id="psx.data.record.importer_manager" />
+        </service>
+
+        <service id="psx.data.extractor" class="PSX\Data\Extractor">
+            <argument type="service" id="psx.data.reader_factory" />
+            <argument type="service" id="psx.data.transformer.transformer_manager" />
+        </service>
+
+        <service id="psx.data.reader_factory" class="PSX\Data\ReaderFactory">
+            <call method="addReader">
+                <argument type="service" id="psx.data.reader.json" />
+                <argument>%psx.data.reader.json.priority%</argument>
+            </call>
+            <call method="addReader">
+                <argument type="service" id="psx.data.reader.form" />
+                <argument>%psx.data.reader.form.priority%</argument>
+            </call>
+            <call method="addReader">
+                <argument type="service" id="psx.data.reader.xml" />
+                <argument>%psx.data.reader.xml.priority%</argument>
+            </call>
+        </service>
+
+        <service id="psx.data.reader.json" class="PSX\Data\Reader\Json" />
+        <service id="psx.data.reader.form" class="PSX\Data\Reader\Form" />
+        <service id="psx.data.reader.xml" class="PSX\Data\Reader\Xml" />
+
+        <service id="psx.data.transformer.transformer_manager" class="PSX\Data\Transformer\TransformerManager" />
+
+        <service id="psx.data.record.importer_manager" class="PSX\Data\Record\ImporterManager">
+            <argument type="service" id="psx.data.record.factory_factory" />
+        </service>
+
+        <service id="psx.data.record.factory_factory" class="PSX\Data\Record\FactoryFactory">
+            <argument type="service" id="psx.dependency.object_builder" />
+        </service>
+
+        <service id="psx.dependency.object_builder" class="PSX\Dependency\ObjectBuilder">
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="psx.data.schema.assimilator" class="PSX\Data\Schema\Assimilator">
+            <argument type="service" id="psx.data.record.factory_factory" />
+        </service>
+
+        <service id="psx.data.writer_factory" class="PSX\Data\WriterFactory">
+            <call method="addWriter">
+                <argument type="service" id="psx.data.writer.json" />
+                <argument>%psx.data.writer.json.priority%</argument>
+            </call>
+            <call method="addWriter">
+                <argument type="service" id="psx.data.writer.atom" />
+                <argument>%psx.data.writer.atom.priority%</argument>
+            </call>
+            <call method="addWriter">
+                <argument type="service" id="psx.data.writer.form" />
+                <argument>%psx.data.writer.form.priority%</argument>
+            </call>
+            <call method="addWriter">
+                <argument type="service" id="psx.data.writer.jsonx" />
+                <argument>%psx.data.writer.jsonx.priority%</argument>
+            </call>
+            <call method="addWriter">
+                <argument type="service" id="psx.data.writer.xml" />
+                <argument>%psx.data.writer.xml.priority%</argument>
+            </call>
+        </service>
+
+        <service id="psx.data.writer.json" class="PSX\Data\Writer\Json" />
+        <service id="psx.data.writer.atom" class="PSX\Data\Writer\Atom" />
+        <service id="psx.data.writer.form" class="PSX\Data\Writer\Form" />
+        <service id="psx.data.writer.jsonx" class="PSX\Data\Writer\Jsonx" />
+        <service id="psx.data.writer.xml" class="PSX\Data\Writer\Xml" />
+    </services>
+</container>
