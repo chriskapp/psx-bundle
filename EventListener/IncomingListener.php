@@ -40,7 +40,7 @@ class IncomingListener
             $message = new Message($request->server->getHeaders(), $request->getContent());
             $data    = $this->importer->import(JsonSchema::fromFile($file), $message);
 
-            $request->attribute->set(Context::REQUEST_BODY, $data);
+            $request->attributes->set(Context::REQUEST_BODY, $data);
         }
     }
 }

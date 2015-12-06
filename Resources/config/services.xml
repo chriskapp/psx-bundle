@@ -27,8 +27,10 @@
             <argument type="service" id="annotation_reader" />
             <argument type="service" id="psx.data.schema.assimilator" />
             <argument type="service" id="psx.data.writer_factory" />
+            <argument type="service" id="psx.exception.converter" />
             <argument>%kernel.root_dir%</argument>
             <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
+            <tag name="kernel.event_listener" event="kernel.exception" method="onKernelException" />
         </service>
 
         <service id="psx.data.importer" class="PSX\Data\Importer">
@@ -106,5 +108,9 @@
         <service id="psx.data.writer.form" class="PSX\Data\Writer\Form" />
         <service id="psx.data.writer.jsonx" class="PSX\Data\Writer\Jsonx" />
         <service id="psx.data.writer.xml" class="PSX\Data\Writer\Xml" />
+
+        <service id="psx.exception.converter" class="PSX\Exception\Converter">
+            <argument>%kernel.debug%</argument>
+        </service>
     </services>
 </container>
