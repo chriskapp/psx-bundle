@@ -2,16 +2,20 @@
 PSX Bundle
 ========================
 
-This Bundle provides basic PSX functionalities to Symfony. The bundle provides
-two annotations `Incoming` and `Outgoing` which give the option to specify a
-JSONSchema for the incoming or outgoing data. The bundle registers a 
-`kernel.controller` and `kernel.response` listener to handle the validation and 
-transformation. More information about PSX at http://phpsx.org.
+This Bundle provides basic PSX functionalities to Symfony. PSX is a framework
+to build RESTful APIs. The bundle contains two annotations `Incoming` and 
+`Outgoing` which give the option to specify a JSONSchema for the incoming or 
+outgoing data. PSX formats the request and response according to the provided
+schema. The bundle registers a `kernel.controller` and `kernel.response` 
+listener to handle the validation and transformation. More information about PSX 
+at http://phpsx.org.
 
 Usage
 -----
 
-In the following a sample controller to showcase the usage
+In the following a sample controller to showcase the usage. You have to use the
+`DataResponse` object in your controller methods so that the PSX can transform 
+the data. If no outgoing schema was defined all data passthru.
 
 ```php
 <?php
@@ -50,7 +54,7 @@ class DefaultController extends Controller
     {
         $data = $request->attributes->get(Context::REQUEST_BODY);
 
-        // @TODO work with the data
+        // @TODO work with the parsed data
         // $data->getFirstName();
 
         return new DataResponse([
