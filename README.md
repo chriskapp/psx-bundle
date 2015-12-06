@@ -14,8 +14,8 @@ Usage
 -----
 
 In the following a sample controller to showcase the usage. You have to use the
-`DataResponse` object in your controller methods so that the PSX can transform 
-the data. If no outgoing schema was defined all data passthru.
+`DataResponse` object in your controller methods so that PSX can transform the 
+data. If no outgoing schema was defined all data passthru.
 
 ```php
 <?php
@@ -62,6 +62,30 @@ class DefaultController extends Controller
             'message' => 'Success!'
         ]);
     }
+}
+```
+
+Using the following JSON schema at `app/schema/incoming.json` and 
+`app/schema/outgoing.json`
+
+```json
+{
+    "title": "foo",
+    "type": "object",
+    "properties": {
+        "firstName": {
+            "type": "string"
+        },
+        "lastName": {
+            "type": "string"
+        },
+        "age": {
+            "description": "Age in years",
+            "type": "integer",
+            "minimum": 0
+        }
+    },
+    "required": ["firstName", "lastName"]
 }
 ```
 
